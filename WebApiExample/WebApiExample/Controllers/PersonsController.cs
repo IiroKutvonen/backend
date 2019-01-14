@@ -4,7 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WebApiExample.models;
+using WebApiExample.Models;
+using WebApiExample.Repositories;
 
 namespace WebApiExample.Controllers
 {
@@ -12,23 +13,32 @@ namespace WebApiExample.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        // GET api/values
-        [HttpGet]
-        public ActionResult GetPersons()
+        private readonly IPersonRepository _personRepository;
+
+        public PersonsController(IPersonRepository personRepository)
         {
-            var users = new List<Person>
-            {
-                new Person("James", 45),
-                new Person ("Lisa", 65),
-            };
-            return new JsonResult(users);
+            _personRepository = personRepository;
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+
+        // GET api/values
+        [HttpGet]
+        public ActionResult<List<Person>> GetPersons()
         {
-            return "value";
+            //var users = new List<Person>
+            //{
+            //    new Person("James", 45),
+            //    new Person ("Lisa", 65),
+            //};
+            return new JsonResult(_personRepository.Read());
+        }
+
+        // GET api/persons/5
+        [HttpGet("{id}")]
+        public ActionResult<Person> Get(int id)
+        {
+            var person = _personRepository.Read(id);
+            return new JsonResult(person);
         }
     }
 }

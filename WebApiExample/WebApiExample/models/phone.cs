@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace WebApiExample.models
+namespace WebApiExample.Models
 {
     public partial class Phone
     {
@@ -12,5 +12,9 @@ namespace WebApiExample.models
         public string Type { get; set; }
         public int? Number { get; set; }
         public int? PersonId { get; set; }
+
+        [ForeignKey("PersonId")]
+        [InverseProperty("phone")]
+        public virtual Person Person { get; set; }
     }
 }

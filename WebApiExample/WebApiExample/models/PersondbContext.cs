@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace WebApiExample.models
+namespace WebApiExample.Models
 {
     public partial class PersondbContext : DbContext
     {
@@ -43,6 +43,12 @@ namespace WebApiExample.models
                 entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.Type).IsUnicode(false);
+
+                entity.HasOne(d => d.Person)
+                    .WithMany(p => p.phone)
+                    .HasForeignKey(d => d.PersonId)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK_phone_ToTable");
             });
 
             OnModelCreatingPartial(modelBuilder);
